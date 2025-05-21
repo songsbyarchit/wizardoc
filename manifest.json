@@ -6,7 +6,6 @@
   "permissions": ["scripting", "activeTab"],
   "host_permissions": ["*://docs.google.com/*"],
   "background": {
-    "service_worker": "background.js"
   },
   "action": {
     "default_icon": {
