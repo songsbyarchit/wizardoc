@@ -26,7 +26,8 @@ if (!SpeechRecognition) {
     boxShadow: '0 0 6px rgba(0,0,0,0.2)'
   });
 
-  document.body.appendChild(button);
+  const container = document.querySelector('.kix-appview-editor') || document.body;
+  container.appendChild(button);
 
   function startRecognition() {
     if (recognition) return;
