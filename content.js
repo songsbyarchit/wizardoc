@@ -52,13 +52,20 @@ if (!SpeechRecognition) {
     };
 
     recognition.onresult = (event) => {
-      const transcript = Array.from(event.results)
+    const transcript = Array.from(event.results)
         .map(r => r[0].transcript)
         .join('');
-      console.log("📝 Transcript:", transcript);
+    console.log("📝 Transcript:", transcript);
 
-    document.execCommand('insertText', false, transcript);
+    const el = document.activeElement;
+    el.dispatchEvent(new InputEvent('input', {
+        inputType: 'insertText',
+        data: transcript,
+        bubbles: true,
+        cancelable: true
+    }));
     };
+
 
     recognition.start();
   }
