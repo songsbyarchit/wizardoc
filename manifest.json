@@ -5,18 +5,16 @@
   "description": "Use voice to control content",
   "permissions": ["scripting", "activeTab"],
   "host_permissions": ["*://docs.google.com/*"],
-  "background": {
-  },
   "action": {
     "default_icon": {
       "16": "icon.png"
     }
   },
   "content_scripts": [
-  {
-    "matches": ["*://docs.google.com/document/*"],
-    "js": ["content.js"],
-    "run_at": "document_idle"
-  }
-]
+    {
+      "matches": ["*://docs.google.com/document/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
 }

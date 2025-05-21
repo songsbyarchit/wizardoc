@@ -1,14 +1,35 @@
-console.log("📄 Content script running in Google Docs");
+console.log("📄 Voice Dictation content script loaded");
 
-// Support both SpeechRecognition and webkitSpeechRecognition
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 if (!SpeechRecognition) {
-  console.error("🎙️ Speech recognition not supported in this environment.");
+  console.error("🎙️ Speech recognition not supported.");
 } else {
-  let recognition;
+  let recognition = null;
+  let isListening = false;
 
-  function startVoice() {
+  // Create floating button
+  const button = document.createElement('button');
+  button.textContent = '🎤';
+  button.id = 'voice-dictation-toggle';
+  Object.assign(button.style, {
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    zIndex: 10000,
+    background: '#fff',
+    border: '2px solid #444',
+    borderRadius: '50%',
+    width: '48px',
+    height: '48px',
+    fontSize: '20px',
+    cursor: 'pointer',
+    boxShadow: '0 0 6px rgba(0,0,0,0.2)'
+  });
+
+  document.body.appendChild(button);
+
+  function startRecognition() {
     if (recognition) return;
 
     recognition = new SpeechRecognition();
@@ -16,11 +37,19 @@ if (!SpeechRecognition) {
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
-    recognition.onstart = () => console.log("🎤 Listening...");
-    recognition.onerror = (e) => console.error("❌ Recognition error:", e.error);
+    recognition.onstart = () => {
+      console.log("🎤 Listening...");
+      button.style.background = '#e74c3c'; // red
+    };
+
     recognition.onend = () => {
-      console.log("🛑 Stopped");
+      console.log("🛑 Stopped listening");
       recognition = null;
+      button.style.background = '#fff';
+    };
+
+    recognition.onerror = (e) => {
+      console.error("❌ Error:", e.error);
     };
 
     recognition.onresult = (event) => {
@@ -44,11 +73,12 @@ if (!SpeechRecognition) {
     recognition.start();
   }
 
-  // Trigger voice start manually via Ctrl+V (for now)
-  document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 'v') {
-      console.log("🎬 Starting voice recognition...");
-      startVoice();
+  button.addEventListener('click', () => {
+    if (isListening) {
+      recognition?.stop();
+    } else {
+      startRecognition();
     }
+    isListening = !isListening;
   });
 }
