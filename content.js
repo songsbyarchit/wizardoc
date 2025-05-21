@@ -57,13 +57,19 @@ if (!SpeechRecognition) {
         .join('');
     console.log("📝 Transcript:", transcript);
 
-    const el = document.activeElement;
-    el.dispatchEvent(new InputEvent('input', {
-        inputType: 'insertText',
-        data: transcript,
+    function insertTextLikeTyping(text) {
+    const textarea = document.activeElement;
+    for (const char of text) {
+        textarea.dispatchEvent(new InputEvent('insertText', {
+        data: char,
         bubbles: true,
-        cancelable: true
-    }));
+        cancelable: true,
+        inputType: 'insertText'
+        }));
+    }
+    }
+
+    insertTextLikeTyping(transcript);
     };
 
 
