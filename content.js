@@ -57,16 +57,7 @@ if (!SpeechRecognition) {
         .join('');
       console.log("📝 Transcript:", transcript);
 
-      const editable = document.querySelector('[contenteditable="true"]');
-      if (editable) {
-        const selection = window.getSelection();
-        const range = selection.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(document.createTextNode(transcript));
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
+    document.execCommand('insertText', false, transcript);
     };
 
     recognition.start();
