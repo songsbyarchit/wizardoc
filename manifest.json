@@ -13,5 +13,12 @@
     "default_icon": {
       "16": "icon.png"
     }
+  },
+  "content_scripts": [
+  {
+    "matches": ["*://docs.google.com/document/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
   }
+]
 }
