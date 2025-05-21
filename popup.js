@@ -1,8 +1,11 @@
 document.getElementById('start').addEventListener('click', () => {
   const status = document.getElementById('status');
-  const recognition = new webkitSpeechRecognition(); // use SpeechRecognition if on Firefox
+  const output = document.getElementById('output');
+
+  const recognition = new webkitSpeechRecognition(); // Use SpeechRecognition if Firefox
   recognition.continuous = true;
   recognition.interimResults = true;
+  recognition.lang = 'en-US';
 
   recognition.onstart = () => {
     status.textContent = 'Listening...';
@@ -12,11 +15,15 @@ document.getElementById('start').addEventListener('click', () => {
     const transcript = Array.from(event.results)
       .map(r => r[0].transcript)
       .join('');
-    console.log('Transcript:', transcript);
+    output.value = transcript;
   };
 
   recognition.onerror = (event) => {
-    console.error('Error:', event.error);
+    status.textContent = 'Error: ' + event.error;
+  };
+
+  recognition.onend = () => {
+    status.textContent = 'Stopped';
   };
 
   recognition.start();

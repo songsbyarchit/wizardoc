@@ -4,6 +4,10 @@
   "version": "1.0",
   "description": "Use voice to control content",
   "permissions": ["scripting", "activeTab"],
+  "host_permissions": ["*://docs.google.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
