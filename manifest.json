@@ -12,7 +12,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://docs.google.com/document/*"],
+      "matches": ["*://docs.google.com/document/d/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
