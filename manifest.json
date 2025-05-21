@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Voice Dictation MVP",
+  "version": "1.0",
+  "description": "Use voice to control content",
+  "permissions": ["scripting", "activeTab"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.jpeg"
+    }
+  }
+}
