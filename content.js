@@ -59,15 +59,13 @@ if (!SpeechRecognition) {
     console.log("📝 Transcript:", transcript);
 
     function insertTextLikeTyping(text) {
-    const textarea = document.activeElement;
-    for (const char of text) {
-        textarea.dispatchEvent(new InputEvent('insertText', {
-        data: char,
-        bubbles: true,
-        cancelable: true,
-        inputType: 'insertText'
-        }));
-    }
+        const editable = document.querySelector('[contenteditable="true"]');
+        if (editable) {
+        editable.focus();
+        document.execCommand('insertText', false, transcript);
+        } else {
+        console.warn("⚠️ No editable content area found");
+        }
     }
 
     insertTextLikeTyping(transcript);
