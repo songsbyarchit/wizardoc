@@ -8,7 +8,6 @@ if (!SpeechRecognition) {
   let recognition = null;
   let isListening = false;
 
-  // Create floating button
   const button = document.createElement('button');
   button.textContent = '🎤';
   button.id = 'voice-dictation-toggle';
@@ -17,7 +16,7 @@ if (!SpeechRecognition) {
     bottom: '20px',
     right: '20px',
     zIndex: 10000,
-    background: '#fff',
+    background: '#ffffff',
     border: '2px solid #444',
     borderRadius: '50%',
     width: '48px',
@@ -45,7 +44,7 @@ if (!SpeechRecognition) {
     recognition.onend = () => {
       console.log("🛑 Stopped listening");
       recognition = null;
-      button.style.background = '#fff';
+      button.style.background = '#ffffff';
     };
 
     recognition.onerror = (e) => {
