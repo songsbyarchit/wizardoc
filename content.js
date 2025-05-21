@@ -1,47 +1,54 @@
 console.log("📄 Content script running in Google Docs");
 
-let recognition;
+// Support both SpeechRecognition and webkitSpeechRecognition
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-function startVoice() {
-  if (recognition) return;
+if (!SpeechRecognition) {
+  console.error("🎙️ Speech recognition not supported in this environment.");
+} else {
+  let recognition;
 
-  recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
+  function startVoice() {
+    if (recognition) return;
 
-  recognition.onstart = () => console.log("🎤 Listening...");
-  recognition.onerror = (e) => console.error("❌ Recognition error:", e.error);
-  recognition.onend = () => {
-    console.log("🛑 Stopped");
-    recognition = null;
-  };
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
 
-  recognition.onresult = (event) => {
-    const transcript = Array.from(event.results)
-      .map(r => r[0].transcript)
-      .join('');
-    console.log("📝 Transcript:", transcript);
+    recognition.onstart = () => console.log("🎤 Listening...");
+    recognition.onerror = (e) => console.error("❌ Recognition error:", e.error);
+    recognition.onend = () => {
+      console.log("🛑 Stopped");
+      recognition = null;
+    };
 
-    const editable = document.querySelector('[contenteditable="true"]');
-    if (editable) {
-      const selection = window.getSelection();
-      const range = selection.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(document.createTextNode(transcript));
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    }
-  };
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map(r => r[0].transcript)
+        .join('');
+      console.log("📝 Transcript:", transcript);
 
-  recognition.start();
-}
+      const editable = document.querySelector('[contenteditable="true"]');
+      if (editable) {
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(document.createTextNode(transcript));
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    };
 
-// Trigger voice start manually via hotkey (for now)
-document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.key === 'v') {
-    console.log("🎬 Starting voice recognition...");
-    startVoice();
+    recognition.start();
   }
-});
+
+  // Trigger voice start manually via Ctrl+V (for now)
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'v') {
+      console.log("🎬 Starting voice recognition...");
+      startVoice();
+    }
+  });
+}
