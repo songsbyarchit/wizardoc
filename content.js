@@ -59,13 +59,19 @@ if (!SpeechRecognition) {
     console.log("📝 Transcript:", transcript);
 
     function insertTextLikeTyping(text) {
-        const editable = document.querySelector('[contenteditable="true"]');
-        if (editable) {
-        editable.focus();
-        document.execCommand('insertText', false, transcript);
-        } else {
-        console.warn("⚠️ No editable content area found");
-        }
+    const doc = document.querySelector('.kix-canvas-tile-content');
+
+    if (doc) {
+        const activeEl = document.activeElement;
+        activeEl.dispatchEvent(new InputEvent('input', {
+        data: text,
+        inputType: 'insertText',
+        bubbles: true,
+        cancelable: true
+        }));
+    } else {
+        console.warn("⚠️ No Google Docs editable canvas found");
+    }
     }
 
     insertTextLikeTyping(transcript);
